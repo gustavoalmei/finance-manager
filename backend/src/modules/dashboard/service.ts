@@ -319,10 +319,8 @@ export const dashboardService: dashboardServiceInterface = {
         },
       };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao carregar o resumo.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao carregar o resumo.");
     }
   },
   getLayout: async (userId: string) => {
@@ -331,10 +329,8 @@ export const dashboardService: dashboardServiceInterface = {
       // null: o front usa o layout padrão
       return { widgets: (layout?.widgets as Widget[] | undefined) ?? null };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao carregar o layout.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao carregar o layout.");
     }
   },
   saveLayout: async ({ userId, widgets }: saveLayoutType) => {
@@ -342,10 +338,8 @@ export const dashboardService: dashboardServiceInterface = {
       await dashboardRepository.upsertLayout({ userId, widgets });
       return { widgets };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao salvar o layout.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao salvar o layout.");
     }
   },
 };

@@ -3,6 +3,7 @@ import { categoryService } from "./service";
 import { handleError } from "@/shared/erros/handle-error";
 import { categoryBodySchema } from "./schema";
 import { HttpError } from "@/shared/erros/http-error";
+import { assertUuid } from "@/shared/utils/validate";
 
 type userType = {
   id: string;
@@ -76,12 +77,10 @@ export const categoryController: categoryInterface = {
     try {
       let user = request.user as userType;
 
-      if (!request.params.id) {
-        throw new HttpError(400, "Id da categoria é obrigatório.");
-      }
+      const id = assertUuid(request.params.id, "ID da categoria inválido.");
 
       let category = await categoryService.findById({
-        id: request.params.id,
+        id,
         userId: user.id,
       });
 
@@ -131,9 +130,7 @@ export const categoryController: categoryInterface = {
     try {
       let user = request.user as userType;
 
-      if (!request.params.id) {
-        throw new HttpError(400, "Id da categoria é obrigatório.");
-      }
+      const id = assertUuid(request.params.id, "ID da categoria inválido.");
 
       let schemaParsed = categoryBodySchema.update.safeParse(request.body);
 
@@ -145,7 +142,7 @@ export const categoryController: categoryInterface = {
       }
 
       let category = await categoryService.update({
-        id: request.params.id,
+        id,
         userId: user.id,
         name: schemaParsed.data.name,
         description: schemaParsed.data.description,
@@ -162,12 +159,10 @@ export const categoryController: categoryInterface = {
     try {
       let user = request.user as userType;
 
-      if (!request.params.id) {
-        throw new HttpError(400, "Id da categoria é obrigatório.");
-      }
+      const id = assertUuid(request.params.id, "ID da categoria inválido.");
 
       let category = await categoryService.delete({
-        id: request.params.id,
+        id,
         userId: user.id,
       });
 

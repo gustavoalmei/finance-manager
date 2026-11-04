@@ -1,13 +1,18 @@
 import { prisma } from "@/app/plugins/database";
 
 interface categoryRepositoryInterface {
-  findById: (id: string) => Promise<any>;
+  findById: (data: findByIdType) => Promise<any>;
   findAllByUserId: (data: findAllByUserIdType) => Promise<any>;
   findByName: (data: findByNameType) => Promise<any>;
   create: (data: createType) => Promise<any>;
-  delete: (id: string) => Promise<any>;
-  update: (id: string, data: updateType) => Promise<any>;
+  delete: (data: findByIdType) => Promise<any>;
+  update: (data: findByIdType, fields: updateType) => Promise<any>;
 }
+
+type findByIdType = {
+  id: string;
+  userId: string;
+};
 
 type findAllByUserIdType = {
   userId: string;
@@ -34,9 +39,9 @@ type updateType = {
 };
 
 export const categoryRepository: categoryRepositoryInterface = {
-  findById: async (id: string) => {
-    return await prisma.category.findUnique({
-      where: { id },
+  findById: async (data: findByIdType) => {
+    return await prisma.category.findFirst({
+      where: { id: data.id, userId: data.userId },
     });
   },
   findAllByUserId: async (data: findAllByUserIdType) => {
@@ -62,19 +67,19 @@ export const categoryRepository: categoryRepositoryInterface = {
       },
     });
   },
-  delete: async (id: string) => {
+  delete: async (data: findByIdType) => {
     return await prisma.category.delete({
-      where: { id },
+      where: { id: data.id, userId: data.userId },
     });
   },
-  update: async (id: string, data: updateType) => {
+  update: async (data: findByIdType, fields: updateType) => {
     return await prisma.category.update({
-      where: { id },
+      where: { id: data.id, userId: data.userId },
       data: {
-        name: data.name,
-        description: data.description ?? null,
-        ...(data.color && { color: data.color }),
-        ...(data.icon && { icon: data.icon }),
+        name: fields.name,
+        description: fields.description ?? null,
+        ...(fields.color && { color: fields.color }),
+        ...(fields.icon && { icon: fields.icon }),
       },
     });
   },

@@ -45,25 +45,19 @@ type deleteType = {
 export const categoryService: categoryServiceInterface = {
   findById: async (data: findByIdType) => {
     try {
-      let category = await categoryRepository.findById(data.id);
+      let category = await categoryRepository.findById({
+        id: data.id,
+        userId: data.userId,
+      });
 
       if (!category) {
         throw new HttpError(404, "Categoria não encontrada.");
       }
 
-      if (category.userId !== data.userId) {
-        throw new HttpError(
-          403,
-          "Você não tem permissão para acessar esta categoria.",
-        );
-      }
-
       return DTO.category(category);
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao buscar categoria.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao buscar categoria.");
     }
   },
   findAll: async (data: findAllType) => {
@@ -74,10 +68,8 @@ export const categoryService: categoryServiceInterface = {
 
       return DTO.categories(categories);
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao buscar categorias.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao buscar categorias.");
     }
   },
   create: async (data: createType) => {
@@ -101,55 +93,46 @@ export const categoryService: categoryServiceInterface = {
 
       return { message: "Categoria criada com sucesso." };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao criar categoria.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao criar categoria.");
     }
   },
   update: async (data: updateType) => {
     try {
-      let category = await categoryRepository.findById(data.id);
+      let category = await categoryRepository.findById({
+        id: data.id,
+        userId: data.userId,
+      });
 
       if (!category) {
         throw new HttpError(404, "Categoria não encontrada.");
       }
 
-      if (category.userId !== data.userId) {
-        throw new HttpError(
-          403,
-          "Você não tem permissão para alterar esta categoria.",
-        );
-      }
-
-      let updatedCategory = await categoryRepository.update(data.id, {
-        name: data.name,
-        description: data.description,
-        color: data.color,
-        icon: data.icon,
-      });
+      let updatedCategory = await categoryRepository.update(
+        { id: data.id, userId: data.userId },
+        {
+          name: data.name,
+          description: data.description,
+          color: data.color,
+          icon: data.icon,
+        },
+      );
 
       return { message: "Categoria atualizada com sucesso." };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao atualizar categoria.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao atualizar categoria.");
     }
   },
   delete: async (data: deleteType) => {
     try {
-      let category = await categoryRepository.findById(data.id);
+      let category = await categoryRepository.findById({
+        id: data.id,
+        userId: data.userId,
+      });
 
       if (!category) {
         throw new HttpError(404, "Categoria não encontrada.");
-      }
-
-      if (category.userId !== data.userId) {
-        throw new HttpError(
-          403,
-          "Você não tem permissão para excluir esta categoria.",
-        );
       }
 
       let categoryHasTransactions =
@@ -165,14 +148,12 @@ export const categoryService: categoryServiceInterface = {
         );
       }
 
-      await categoryRepository.delete(data.id);
+      await categoryRepository.delete({ id: data.id, userId: data.userId });
 
       return { message: "Categoria excluida com sucesso." };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao deletar categoria.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao deletar categoria.");
     }
   },
 };

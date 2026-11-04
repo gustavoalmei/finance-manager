@@ -96,7 +96,7 @@ interface transactionRepositoryInterface {
   delete: (data: deleteTransactionType) => Promise<any>;
   deleteMany: (data: deleteManyType) => Promise<any>;
   update: (data: updateTransactionType) => Promise<any>;
-  findParentTransactionById: (id: string) => Promise<any>;
+  findParentTransactionById: (data: findByIdType) => Promise<any>;
   findByParentTransactionId: (data: deleteTransactionType) => Promise<any>;
   findByCardId: (data: findByCardIdType) => Promise<any>;
   existsByCategoryId: (data: existsByCategoryIdType) => Promise<boolean>;
@@ -163,9 +163,9 @@ export const transactionRepository: transactionRepositoryInterface = {
       return transaction;
     });
   },
-  findParentTransactionById: async (id: string) => {
+  findParentTransactionById: async (data: findByIdType) => {
     return await prisma.transaction.findFirst({
-      where: { parentTransactionId: id },
+      where: { parentTransactionId: data.id, userId: data.userId },
     });
   },
   findByParentTransactionId: async (data: deleteTransactionType) => {

@@ -61,10 +61,8 @@ export const accountService: accountService = {
 
       return DTO.account(foundAccount);
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao encontrar conta.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao encontrar conta.");
     }
   },
   findAll: async (data: findAllTypes) => {
@@ -79,10 +77,8 @@ export const accountService: accountService = {
 
       return DTO.accounts(foundAccounts);
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao encontrar contas.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao encontrar contas.");
     }
   },
   create: async (data: dataAccount) => {
@@ -101,10 +97,8 @@ export const accountService: accountService = {
 
       return DTO.account(account);
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao criar conta.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao criar conta.");
     }
   },
   delete: async (data: deleteAccountType) => {
@@ -135,10 +129,8 @@ export const accountService: accountService = {
 
       return DTO.account(deleteAccount);
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao deletar conta.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao deletar conta.");
     }
   },
   update: async (data: updateAccountType) => {
@@ -170,10 +162,8 @@ export const accountService: accountService = {
 
       return DTO.account(updateAccount);
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao atualizar conta.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao atualizar conta.");
     }
   },
 };

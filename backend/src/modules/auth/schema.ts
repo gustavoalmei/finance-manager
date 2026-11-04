@@ -20,13 +20,19 @@ export const passwordSchema = z
 
 export const authBodySchema = {
   login: z.object({
-    email: z.string({ error: "O email é obrigatório." }),
+    email: z
+      .string({ error: "O email é obrigatório." })
+      .trim()
+      .toLowerCase()
+      .pipe(z.email({ error: "O email é inválido." })),
     password: z.string({ error: "A senha é obrigatório." }),
   }),
   register: z.object({
     name: z.string({ error: "O nome é obrigatório." }),
     email: z
       .string({ error: "O email é obrigatório." })
+      .trim()
+      .toLowerCase()
       .pipe(z.email({ error: "O email é inválido." })),
     password: passwordSchema,
   }),

@@ -3,6 +3,8 @@ import routers from "@/app/routes/routes";
 import cors from "@fastify/cors";
 import fastifyMiddie from "@fastify/middie";
 import fastifySecureSession from "@fastify/secure-session";
+import rateLimit from "@fastify/rate-limit";
+import helmet from "@fastify/helmet";
 import auth from "@/app/plugins/auth";
 
 const server: FastifyInstance = Fastify({
@@ -17,6 +19,8 @@ if (!key) {
   );
 }
 await server
+  // CSP desligado: a API só devolve JSON, não serve HTML
+  .register(helmet, { contentSecurityPolicy: false })
   .register(cors, {
     origin: "http://localhost:3001",
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -37,6 +41,9 @@ await server
     },
   })
   .register(auth.middleware);
+
+// Rate limit desligado por padrão; cada rota sensível opta via config.rateLimit
+await server.register(rateLimit, { global: false });
 
 server.register(routers);
 

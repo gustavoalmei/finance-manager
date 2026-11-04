@@ -458,18 +458,19 @@ async function createTransactionWithCard(data: transactionWithCardType) {
 
     return transaction;
   } catch (error: any) {
-    throw new HttpError(
-      error.statusCode || 500,
-      error.message || "Erro ao buscar os cartões.",
-    );
+    if (error instanceof HttpError) throw error;
+    throw new HttpError(500, "Erro ao buscar os cartões.");
   }
 }
 
 export const transactionService: transactionService = {
   create: async (data: createTransactionType) => {
     try {
-      // Procurar se a categoria existe
-      let findCategory = await categoryRepository.findById(data.categoryId);
+      // Procurar se a categoria existe e pertence ao usuário
+      let findCategory = await categoryRepository.findById({
+        id: data.categoryId,
+        userId: data.userId,
+      });
       if (!findCategory) {
         throw new HttpError(404, "Categoria nao encontrada.");
       }
@@ -495,9 +496,10 @@ export const transactionService: transactionService = {
       // Procurar se a transacao pai existe
       if (data.parentTransactionId) {
         let findParentTransaction =
-          await transactionRepository.findParentTransactionById(
-            data.parentTransactionId,
-          );
+          await transactionRepository.findParentTransactionById({
+            id: data.parentTransactionId,
+            userId: data.userId,
+          });
         if (!findParentTransaction) {
           throw new HttpError(404, "Transação pai não encontrada.");
         }
@@ -527,10 +529,8 @@ export const transactionService: transactionService = {
         message: "Transação criada com sucesso.",
       };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao criar a transação.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao criar a transação.");
     }
   },
   update: async (data: updateTransactionType) => {
@@ -543,8 +543,11 @@ export const transactionService: transactionService = {
         throw new HttpError(404, "Transação não encontrada.");
       }
 
-      // Procurar se a categoria existe
-      let findCategory = await categoryRepository.findById(data.categoryId);
+      // Procurar se a categoria existe e pertence ao usuário
+      let findCategory = await categoryRepository.findById({
+        id: data.categoryId,
+        userId: data.userId,
+      });
       if (!findCategory) {
         throw new HttpError(404, "Categoria não encontrada.");
       }
@@ -591,10 +594,8 @@ export const transactionService: transactionService = {
         message: "Transação atualizada com sucesso.",
       };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao atualizar a transação.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao atualizar a transação.");
     }
   },
   getById: async (data: getByIdTransactionType) => {
@@ -616,10 +617,8 @@ export const transactionService: transactionService = {
 
       return transactions;
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao listar a transação.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao listar a transação.");
     }
   },
   getAllTransactions: async (data: getAllTransactionType) => {
@@ -651,10 +650,8 @@ export const transactionService: transactionService = {
 
       return transactions;
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao listar as transações.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao listar as transações.");
     }
   },
   delete: async (data: deleteTransactionType) => {
@@ -703,10 +700,8 @@ export const transactionService: transactionService = {
         message: "Transação deletada com sucesso.",
       };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao listar as transações.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao listar as transações.");
     }
   },
   transfer: async (data: transferTransactionType) => {
@@ -767,10 +762,8 @@ export const transactionService: transactionService = {
         message: "Transferência realizada com sucesso.",
       };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao listar as transações.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao listar as transações.");
     }
   },
   importFile: async (data: importFileTransactionType) => {
@@ -965,20 +958,16 @@ export const transactionService: transactionService = {
         message: `${rows.length} transações importadas com sucesso.`,
       };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao importar o arquivo.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao importar o arquivo.");
     }
   },
   aiModels: async () => {
     try {
       return await listFreeModels();
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao listar os modelos de IA.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao listar os modelos de IA.");
     }
   },
   // Só lê e organiza: devolve rascunhos para revisão, nada é gravado
@@ -1015,10 +1004,8 @@ export const transactionService: transactionService = {
         cards: cards.map((card) => ({ id: card.id, name: card.name })),
       });
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao processar o texto.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao processar o texto.");
     }
   },
   // Grava as linhas revisadas: confere que categoria e cartão são do usuário
@@ -1074,10 +1061,8 @@ export const transactionService: transactionService = {
             : `${data.rows.length} transações lançadas.`,
       };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao lançar as transações.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao lançar as transações.");
     }
   },
 };

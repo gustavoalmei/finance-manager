@@ -14,10 +14,12 @@ export const meBodySchema = {
       email: z
         .string({ error: "O e-mail é obrigatório." })
         .trim()
+        .toLowerCase()
         .pipe(z.email({ error: "O e-mail é inválido." })),
       emailConfirmation: z
         .string({ error: "Confirme o e-mail." })
-        .trim(),
+        .trim()
+        .toLowerCase(),
       currentPassword: z.string().optional(),
     })
     .refine((data) => data.email === data.emailConfirmation, {

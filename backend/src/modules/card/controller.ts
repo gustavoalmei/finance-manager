@@ -3,6 +3,7 @@ import { HttpError } from "@/shared/erros/http-error";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { cardBodySchema } from "./schema";
 import { cardService } from "./service";
+import { assertUuid } from "@/shared/utils/validate";
 
 type userType = {
   id: string;
@@ -77,12 +78,10 @@ export const controllerCard: cardInterface = {
     try {
       let user = request.user as userType;
 
-      if (!request.params.id) {
-        throw new HttpError(400, "Id do cartão é obrigatório.");
-      }
+      const id = assertUuid(request.params.id, "ID do cartão inválido.");
 
       let card = await cardService.findByID({
-        id: request.params.id,
+        id,
         userId: user.id,
       });
 
@@ -131,9 +130,7 @@ export const controllerCard: cardInterface = {
     try {
       let user = request.user as userType;
 
-      if (!request.params.id) {
-        throw new HttpError(400, "Id do cartão é obrigatório.");
-      }
+      const id = assertUuid(request.params.id, "ID do cartão inválido.");
 
       let schemaParsed = cardBodySchema.update.safeParse(request.body);
 
@@ -146,7 +143,7 @@ export const controllerCard: cardInterface = {
 
       let req = await cardService.update({
         ...schemaParsed.data,
-        id: request.params.id,
+        id,
         userId: user.id,
       });
 
@@ -159,12 +156,10 @@ export const controllerCard: cardInterface = {
     try {
       let user = request.user as userType;
 
-      if (!request.params.id) {
-        throw new HttpError(400, "Id do cartão é obrigatório.");
-      }
+      const id = assertUuid(request.params.id, "ID do cartão inválido.");
 
       let req = await cardService.delete({
-        id: request.params.id,
+        id,
         userId: user.id,
       });
 

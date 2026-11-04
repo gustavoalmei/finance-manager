@@ -138,7 +138,11 @@ export default async function routes(fastify: FastifyInstance) {
   );
   fastify.post<aiExtractType>(
     "/transactions/ai/extract",
-    { preHandler: fastify.authenticate },
+    {
+      preHandler: fastify.authenticate,
+      // 20/min por IP: evita queimar a cota do OpenRouter com chamadas em massa
+      config: { rateLimit: { max: 20, timeWindow: "1 minute" } },
+    },
     controllerTransaction.aiExtract,
   );
   fastify.post<importRowsType>(

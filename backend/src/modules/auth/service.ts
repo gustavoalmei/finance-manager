@@ -57,7 +57,8 @@ export const authService: authService = {
     const EXPIRATION_IN_MILLISECONDS = 2592000000;
 
     try {
-      const findUser = await authRepository.findByEmail({ email: user.email });
+      const email = user.email.trim().toLowerCase();
+      const findUser = await authRepository.findByEmail({ email });
 
       if (!findUser) {
         throw new HttpError(401, "Credenciais inválidas.");
@@ -85,21 +86,20 @@ export const authService: authService = {
 
       return dto.login(findUser);
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao realizar login.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao realizar login.");
     }
   },
   create: async (user: createUserType) => {
     try {
+      const email = user.email.trim().toLowerCase();
       const objectNewUser = {
         name: user.name,
-        email: user.email,
+        email,
         password: await auth.createHash(user.password),
       };
 
-      let findUser = await authRepository.findByEmail({ email: user.email });
+      let findUser = await authRepository.findByEmail({ email });
       if (findUser) {
         throw new HttpError(400, "Usuário ja cadastrado.");
       }
@@ -108,10 +108,8 @@ export const authService: authService = {
 
       return { message: "Usuário cadastrado com sucesso." };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao criar usuário.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao criar usuário.");
     }
   },
   logout: async (request: FastifyRequest) => {
@@ -127,10 +125,8 @@ export const authService: authService = {
 
       return { message: "Logout realizado com sucesso." };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao realizar logout.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao realizar logout.");
     }
   },
 };

@@ -184,14 +184,14 @@ export const controllerTransaction: transactionInterface = {
       }
 
       if (!user) {
-        return new HttpError(401, "Não autenticado.");
+        throw new HttpError(401, "Não autenticado.");
       }
 
       let parsedBody =
         transactionBodySchema.create.safeParse(objectTransaction);
 
       if (!parsedBody.success) {
-        return new HttpError(
+        throw new HttpError(
           400,
           parsedBody.error.issues[0]?.message ?? "Dados inválidos",
         );
@@ -212,11 +212,11 @@ export const controllerTransaction: transactionInterface = {
       let user = request.user as userType;
 
       if (!user) {
-        return new HttpError(401, "Não autenticado.");
+        throw new HttpError(401, "Não autenticado.");
       }
 
       if (!request.params.id) {
-        return new HttpError(400, "ID inválido.");
+        throw new HttpError(400, "ID inválido.");
       }
 
       let objectUpdateTransaction: any = {
@@ -248,7 +248,7 @@ export const controllerTransaction: transactionInterface = {
       );
 
       if (!parsedBody.success) {
-        return new HttpError(
+        throw new HttpError(
           400,
           parsedBody.error.issues[0]?.message ?? "Dados inválidos",
         );
@@ -274,14 +274,14 @@ export const controllerTransaction: transactionInterface = {
       };
 
       if (!user) {
-        return new HttpError(401, "Não autenticado.");
+        throw new HttpError(401, "Não autenticado.");
       }
 
       let parsedBody =
         transactionBodySchema.delete.safeParse(objectTransaction);
 
       if (!parsedBody.success) {
-        return new HttpError(
+        throw new HttpError(
           400,
           parsedBody.error.issues[0]?.message ?? "Dados inválidos",
         );
@@ -302,11 +302,11 @@ export const controllerTransaction: transactionInterface = {
       let user = request.user as userType;
 
       if (!user) {
-        return new HttpError(401, "Não autenticado.");
+        throw new HttpError(401, "Não autenticado.");
       }
 
       if (!request.params.id) {
-        return new HttpError(400, "ID inválido.");
+        throw new HttpError(400, "ID inválido.");
       }
 
       let parsedBody = transactionBodySchema.getById.safeParse({
@@ -315,7 +315,7 @@ export const controllerTransaction: transactionInterface = {
       });
 
       if (!parsedBody.success) {
-        return new HttpError(
+        throw new HttpError(
           400,
           parsedBody.error.issues[0]?.message ?? "Dados inválidos",
         );
@@ -339,7 +339,7 @@ export const controllerTransaction: transactionInterface = {
       let user = request.user as userType;
 
       if (!user) {
-        return new HttpError(401, "Não autenticado.");
+        throw new HttpError(401, "Não autenticado.");
       }
 
       let parsedBody = transactionBodySchema.getAll.safeParse({
@@ -348,7 +348,7 @@ export const controllerTransaction: transactionInterface = {
       });
 
       if (!parsedBody.success) {
-        return new HttpError(
+        throw new HttpError(
           400,
           parsedBody.error.issues[0]?.message ?? "Dados inválidos",
         );
@@ -369,13 +369,13 @@ export const controllerTransaction: transactionInterface = {
       let user = request.user as userType;
 
       if (!user) {
-        return new HttpError(401, "Não autenticado.");
+        throw new HttpError(401, "Não autenticado.");
       }
 
       let parsedBody = transactionBodySchema.transfer.safeParse(request.body);
 
       if (!parsedBody.success) {
-        return new HttpError(
+        throw new HttpError(
           400,
           parsedBody.error.issues[0]?.message ?? "Dados inválidos",
         );
@@ -399,13 +399,13 @@ export const controllerTransaction: transactionInterface = {
       let user = request.user as userType;
 
       if (!user) {
-        return new HttpError(401, "Não autenticado.");
+        throw new HttpError(401, "Não autenticado.");
       }
 
       let parsedBody = transactionBodySchema.importFile.safeParse(request.body);
 
       if (!parsedBody.success) {
-        return new HttpError(
+        throw new HttpError(
           400,
           parsedBody.error.issues[0]?.message ?? "Dados inválidos",
         );

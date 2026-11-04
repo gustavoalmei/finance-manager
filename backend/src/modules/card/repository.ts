@@ -17,7 +17,6 @@ type sumByCardType = {
 
 interface cardRepositoryInterface {
   create: (data: createType) => Promise<any>;
-  get: (data: getType) => Promise<any>;
   getAll: (data: getAllType) => Promise<Card[]>;
   sumByCard: (data: sumByCardType) => Promise<CardSumRow[]>;
   update: (data: updateType) => Promise<any>;
@@ -29,10 +28,6 @@ interface cardRepositoryInterface {
 type createType = CardBody & {
   userId: string;
   accountId: string;
-};
-
-type getType = {
-  id: string;
 };
 
 type getAllType = {
@@ -68,13 +63,6 @@ export const cardRepository: cardRepositoryInterface = {
       },
     });
   },
-  get: async (data: getType) => {
-    return prisma.card.findUnique({
-      where: {
-        id: data.id,
-      },
-    });
-  },
   getAll: async (data: getAllType) => {
     return await prisma.card.findMany({
       where: {
@@ -105,9 +93,9 @@ export const cardRepository: cardRepositoryInterface = {
     return await prisma.card.update({
       where: {
         id: data.id,
+        userId: data.userId,
       },
       data: {
-        id: data.id,
         name: data.name,
         description: data.description ?? null,
         brand: data.brand,

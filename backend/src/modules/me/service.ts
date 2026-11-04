@@ -77,10 +77,8 @@ export const meService: meServiceInterface = {
 
       return dto.me(updated);
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao atualizar o perfil.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao atualizar o perfil.");
     }
   },
   changePassword: async (data: changePasswordType) => {
@@ -96,10 +94,8 @@ export const meService: meServiceInterface = {
 
       return { message: "Senha alterada com sucesso.", revokedSessions };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao alterar a senha.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao alterar a senha.");
     }
   },
   revokeOtherSessions: async (data: revokeOtherSessionsType) => {
@@ -111,10 +107,8 @@ export const meService: meServiceInterface = {
 
       return { message: "Outras sessões encerradas.", revokedSessions };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao encerrar as sessões.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao encerrar as sessões.");
     }
   },
   updatePreferences: async (data: updatePreferencesType) => {
@@ -126,10 +120,8 @@ export const meService: meServiceInterface = {
 
       return dto.me(updated);
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao salvar as preferências.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao salvar as preferências.");
     }
   },
 };

@@ -23,7 +23,7 @@ export const authController = {
       let schemaParsed = authBodySchema.login.safeParse(request.body);
 
       if (!schemaParsed.success) {
-        return new HttpError(
+        throw new HttpError(
           400,
           schemaParsed.error.issues[0]?.message ?? "Dados inválidos",
         );
@@ -45,7 +45,7 @@ export const authController = {
       let schemaParsed = authBodySchema.register.safeParse(resquestBody);
 
       if (!schemaParsed.success) {
-        return new HttpError(
+        throw new HttpError(
           400,
           schemaParsed.error.issues[0]?.message ?? "Dados inválidos",
         );

@@ -88,10 +88,8 @@ export const cardService: cardService = {
 
       return cardCreate;
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao criar o cartão.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao criar o cartão.");
     }
   },
   findAll: async (data: findAllType) => {
@@ -142,10 +140,8 @@ export const cardService: cardService = {
         };
       });
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao buscar os cartões.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao buscar os cartões.");
     }
   },
   findByID: async (data: findByIDType) => {
@@ -167,10 +163,8 @@ export const cardService: cardService = {
       }
       return cardCreate;
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao buscar os cartões.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao buscar os cartões.");
     }
   },
   update: async (data: updateType) => {
@@ -199,10 +193,8 @@ export const cardService: cardService = {
 
       return { message: "Cartão atualizado com sucesso." };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao buscar os cartões.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao buscar os cartões.");
     }
   },
   delete: async (data: deleteType) => {
@@ -237,10 +229,8 @@ export const cardService: cardService = {
 
       return { message: "Cartão deletado com sucesso." };
     } catch (error: any) {
-      throw new HttpError(
-        error.statusCode || 500,
-        error.message || "Erro ao buscar os cartões.",
-      );
+      if (error instanceof HttpError) throw error;
+      throw new HttpError(500, "Erro ao buscar os cartões.");
     }
   },
 };

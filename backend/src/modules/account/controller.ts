@@ -4,6 +4,7 @@ import { DTO } from "./dto";
 import { handleError } from "@/shared/erros/handle-error";
 import { accountBodySchema } from "./schema";
 import { HttpError } from "@/shared/erros/http-error";
+import { assertUuid } from "@/shared/utils/validate";
 
 interface accountController {
   handlerGetAccount: (
@@ -90,13 +91,11 @@ export const accountController: accountController = {
         throw new HttpError(401, "Não autenticado.");
       }
 
-      if (!request.params.id) {
-        throw new HttpError(400, "Dados inválidos.");
-      }
+      const id = assertUuid(request.params.id, "ID da conta inválido.");
 
       let accountUser = await accountService.findById({
         userId: user.id,
-        id: request.params.id,
+        id,
       });
 
       return reply.code(200).send(accountUser);
@@ -170,7 +169,7 @@ export const accountController: accountController = {
         throw new HttpError(401, "Não autenticado.");
       }
 
-      let idAccount = request.params.id;
+      let idAccount = assertUuid(request.params.id, "ID da conta inválido.");
 
       let parsedBody = accountBodySchema.update.safeParse(request.body);
 
@@ -202,7 +201,7 @@ export const accountController: accountController = {
         throw new HttpError(401, "Não autenticado.");
       }
 
-      let { id } = request.params;
+      const id = assertUuid(request.params.id, "ID da conta inválido.");
 
       let accountUser = await accountService.delete({
         id: id,
