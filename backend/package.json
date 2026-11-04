@@ -1,0 +1,32 @@
+{
+  "type": "module",
+  "ignoreDeprecations": "6.0",
+  "scripts": {
+    "dev": "npm run services:up && (trap 'npm run services:stop' INT TERM; tsx watch src/server.ts)",
+    "services:up": "docker compose -f docker-compose.yml up -d",
+    "services:down": "docker compose -f docker-compose.yml down",
+    "services:stop": "docker compose -f docker-compose.yml stop"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.3.0",
+    "@fastify/middie": "^9.3.3",
+    "@fastify/secure-session": "^8.3.0",
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "argon2": "^0.45.1",
+    "dotenv": "^17.4.2",
+    "dotenv-expand": "^1000.0.0",
+    "exceljs": "^4.4.0",
+    "fastify": "^5.11.3",
+    "fastify-plugin": "^6.0.0",
+    "pg": "^8.23.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "prisma": "^7.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.23.12",
+    "typescript": "^7.0.2"
+  }
+}

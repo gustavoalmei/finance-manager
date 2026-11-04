@@ -1,0 +1,280 @@
+@import 'tailwindcss';
+
+/* Aplica dark: no próprio elemento .dark e em todos os descendentes */
+@custom-variant dark (&:where(.dark, .dark *));
+:root {
+  --palette-navy-950: #010f1c;
+  --palette-indigo-975: #04052e;
+  --palette-navy-900: #121b2a;
+  --palette-violet-950: #140152; /* só no gradiente */
+  --palette-violet-900: #22007c;
+  --palette-neutral-50: #f4f4f9;
+  --palette-white: #ffffff;
+  --palette-red-700: #b42318;
+  --palette-red-600: #dc2626;
+  --palette-red-400: #f87171;
+  --palette-green-700: #15803d;
+  --palette-green-400: #40ca5c;
+  --palette-amber-700: #a16207;
+  --palette-amber-300: #f7cf26;
+}
+
+/* ==========================================================================
+   LIGHT
+   ========================================================================== */
+:root {
+  color-scheme: light;
+
+  /* Superfícies */
+  --background: var(--palette-neutral-50); /* cor/fundo · #F4F4F9 */
+  --card: var(--palette-white); /* cor/superficie · #FFFFFF */
+  --muted: color-mix(
+    in srgb,
+    var(--palette-navy-900) 5%,
+    transparent
+  ); /* cor/sutil · #121B2A 5% */
+  --popover: var(--palette-white); /* cor/popover · #FFFFFF */
+  --item: var(--palette-neutral-50); /* cor/item · #F4F4F9 */
+
+  /* Texto e ícones */
+  --foreground: var(--palette-navy-900); /* cor/texto · #121B2A */
+  --muted-foreground: color-mix(
+    in srgb,
+    var(--palette-navy-900) 72%,
+    transparent
+  ); /* cor/texto-secundario · #121B2A 72% */
+  --icon-muted: color-mix(
+    in srgb,
+    var(--palette-navy-900) 70%,
+    transparent
+  ); /* cor/icone-inativo · #121B2A 70% */
+
+  /* Marca */
+  --brand: var(--palette-violet-900); /* cor/marca · #22007C */
+  --brand-foreground: var(--palette-white); /* cor/sobre-marca · #FFFFFF */
+
+  /* Ações */
+  --primary: var(--palette-violet-900); /* cor/acao-primaria · #22007C */
+  --primary-foreground: var(
+    --palette-white
+  ); /* cor/sobre-acao-primaria · #FFFFFF */
+
+  /* Navegação */
+  --nav-active: var(--palette-violet-900); /* cor/nav-ativo · #22007C */
+  --nav-active-foreground: var(
+    --palette-white
+  ); /* cor/sobre-nav-ativo · #FFFFFF */
+
+  /* Bordas e foco */
+  --border: color-mix(
+    in srgb,
+    var(--palette-navy-900) 8%,
+    transparent
+  ); /* cor/borda · #121B2A 8% */
+  --border-strong: color-mix(
+    in srgb,
+    var(--palette-navy-900) 20%,
+    transparent
+  ); /* cor/borda-forte · #121B2A 20% */
+  --input: color-mix(
+    in srgb,
+    var(--palette-navy-900) 50%,
+    transparent
+  ); /* cor/borda-input · #121B2A 50% */
+  --ring: var(--palette-violet-900); /* cor/foco · #22007C */
+
+  /* Overlay */
+  --scrim: color-mix(
+    in srgb,
+    var(--palette-indigo-975) 50%,
+    transparent
+  ); /* cor/scrim · #04052E 50% */
+
+  /* Perigo */
+  --destructive: color-mix(
+    in srgb,
+    var(--palette-red-700) 70%,
+    transparent
+  ); /* cor/perigo · #B42318 70% */
+  --destructive-soft: color-mix(
+    in srgb,
+    var(--palette-red-700) 8%,
+    transparent
+  ); /* cor/perigo-suave · #B42318 8% */
+  --destructive-text: var(--palette-red-700); /* cor/perigo-texto · #B42318 */
+  --destructive-foreground: var(
+    --palette-white
+  ); /* cor/sobre-perigo · #FFFFFF */
+
+  /* Valores financeiros */
+  --success: var(--palette-green-700); /* cor/receita · #15803D */
+  --warning: var(--palette-amber-700); /* cor/pendente · #A16207 */
+
+  /* Gráficos: paleta categórica validada (CVD) — ordem fixa, ver lib/categories */
+  --chart-blue: #2a78d6;
+  --chart-orange: #eb6834;
+  --chart-aqua: #1baf7a;
+  --chart-yellow: #eda100;
+  --chart-magenta: #e87ba4;
+  --chart-green: #008300;
+  --chart-violet: #6250d6;
+  --chart-red: #e34948;
+  --chart-other: #a3a29c; /* fatia "Outras" */
+
+  /* Gradiente (não é variável no Figma: variáveis não guardam gradiente) */
+  --gradient-hero: linear-gradient(
+    135deg,
+    var(--palette-indigo-975),
+    var(--palette-violet-950),
+    var(--palette-violet-900)
+  );
+}
+
+/* ==========================================================================
+   DARK
+   ========================================================================== */
+.dark {
+  color-scheme: dark;
+
+  /* Superfícies */
+  --background: var(--palette-navy-950); /* #010F1C */
+  --card: var(--palette-navy-900); /* #121B2A */
+  --muted: color-mix(
+    in srgb,
+    var(--palette-white) 6%,
+    transparent
+  ); /* #FFFFFF 6% */
+  --popover: var(--palette-navy-950); /* #010F1C */
+  --item: var(--palette-navy-950); /* #010F1C */
+
+  /* Texto e ícones */
+  --foreground: var(--palette-neutral-50); /* #F4F4F9 */
+  --muted-foreground: color-mix(
+    in srgb,
+    var(--palette-neutral-50) 70%,
+    transparent
+  ); /* #F4F4F9 70% */
+  --icon-muted: color-mix(
+    in srgb,
+    var(--palette-neutral-50) 75%,
+    transparent
+  ); /* #F4F4F9 75% */
+
+  /* Marca */
+  --brand: var(--palette-violet-900); /* #22007C */
+  --brand-foreground: var(--palette-white); /* #FFFFFF */
+
+  /* Ações */
+  --primary: var(--palette-neutral-50); /* #F4F4F9 */
+  --primary-foreground: var(--palette-indigo-975); /* #04052E */
+
+  /* Navegação */
+  --nav-active: var(--palette-violet-900); /* #22007C */
+  --nav-active-foreground: var(--palette-neutral-50); /* #F4F4F9 */
+
+  /* Bordas e foco */
+  --border: color-mix(
+    in srgb,
+    var(--palette-white) 8%,
+    transparent
+  ); /* #FFFFFF 8% */
+  --border-strong: color-mix(
+    in srgb,
+    var(--palette-white) 16%,
+    transparent
+  ); /* #FFFFFF 16% */
+  --input: color-mix(
+    in srgb,
+    var(--palette-white) 40%,
+    transparent
+  ); /* #FFFFFF 40% */
+  --ring: var(--palette-neutral-50); /* #F4F4F9 */
+
+  /* Overlay */
+  --scrim: color-mix(
+    in srgb,
+    var(--palette-indigo-975) 72%,
+    transparent
+  ); /* #04052E 72% */
+
+  /* Perigo */
+  --destructive: color-mix(
+    in srgb,
+    var(--palette-red-600) 70%,
+    transparent
+  ); /* #DC2626 70% */
+  --destructive-soft: color-mix(
+    in srgb,
+    var(--palette-red-600) 14%,
+    transparent
+  ); /* #DC2626 14% */
+  --destructive-text: var(--palette-red-400); /* #F87171 */
+  --destructive-foreground: var(--palette-white); /* #FFFFFF */
+
+  /* Valores financeiros */
+  --success: var(--palette-green-400); /* #40CA5C */
+  --warning: var(--palette-amber-300); /* #F7CF26 */
+
+  /* Gráficos: mesmos tons, passos escolhidos para o fundo escuro */
+  --chart-blue: #3987e5;
+  --chart-orange: #d95926;
+  --chart-aqua: #199e70;
+  --chart-yellow: #c98500;
+  --chart-magenta: #d55181;
+  --chart-green: #008300;
+  --chart-violet: #9085e9;
+  --chart-red: #e66767;
+  --chart-other: #5d5c57;
+}
+
+@theme inline {
+  --radius-panel: 30px; /* rounded-panel: cards e painéis principais */
+  --color-background: var(--background);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-popover: var(--popover);
+  --color-item: var(--item);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-placeholder: var(--muted-foreground); /* placeholder = texto-secundario */
+  --color-icon-muted: var(--icon-muted);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-nav-active: var(--nav-active);
+  --color-nav-active-foreground: var(--nav-active-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-scrim: var(--scrim);
+  --color-destructive: var(--destructive);
+  --color-destructive-soft: var(--destructive-soft);
+  --color-destructive-text: var(--destructive-text);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+}
+
+/* Barra do carrossel: keyframe roda ao montar o elemento, transition não */
+@keyframes progress-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* "Ocultar valores" (Configurações e olho no header): borra só o que é dinheiro.
+   Marque com .sensitive o elemento que EXIBE o valor; campos de formulário não. */
+.hide-values .sensitive {
+  filter: blur(6px);
+  user-select: none;
+}
+
+/* Gradiente não é cor: class="bg-hero" */
+@utility bg-hero {
+  background-image: var(--gradient-hero);
+}

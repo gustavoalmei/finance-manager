@@ -1,0 +1,170 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum typeTransation {
+  INCOME // dinheiro entrando
+  EXPENSE // dinheiro saindo
+  TRANSFER // dinheiro movido entre contas próprias
+}
+
+enum CardBrand {
+  VISA
+  MASTERCARD
+  ELO
+  AMEX
+  HIPERCARD
+  DINERS
+  OTHER
+}
+
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id           String        @id @default(uuid()) @db.Uuid
+  name         String
+  email        String        @unique
+  password     String
+  // dia em que o "mês financeiro" começa (1–28); 1 = mês do calendário
+  monthStartDay Int          @default(1)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  sessions     Sessions[]
+  accounts     Account[]
+  transactions Transaction[]
+  cards        Card[]
+  categories   Category[]
+  dashboard    DashboardLayout?
+}
+
+model Sessions {
+  id        String   @id @default(uuid()) @db.Uuid
+  token     String
+  expiresAt DateTime
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Account {
+  id                      String        @id @default(uuid()) @db.Uuid
+  userId                  String        @db.Uuid
+  user                    User          @relation(fields: [userId], references: [id])
+  name                    String
+  type                    String // tipo da conta: corrente, poupança...
+  accountBalance          Int           @default(0)
+  createdAt               DateTime      @default(now())
+  updatedAt               DateTime      @updatedAt
+  cards                   Card[]
+  deletedAt               DateTime?
+  transactions            Transaction[] @relation("AccountTransactions")
+  sourceTransactions      Transaction[] @relation("SourceAccountTransactions")
+  destinationTransactions Transaction[] @relation("destinationAccountTransactions")
+}
+
+model Card {
+  id             String        @id @default(uuid()) @db.Uuid
+  userId         String        @db.Uuid
+  user           User          @relation(fields: [userId], references: [id])
+  accountId      String        @db.Uuid
+  account        Account       @relation(fields: [accountId], references: [id])
+  name           String
+  description    String?
+  brand          CardBrand     @default(OTHER) // default só preenche cartões antigos
+  // Só os 4 últimos dígitos: o número completo nunca deve chegar ao backend (PCI DSS).
+  // Opcional porque cartões antigos não têm essa informação.
+  lastFourDigits String?       @db.Char(4)
+  creditLimit    Int
+  closingDay     Int // dia do mês (1–31)
+  dueDay         Int // dia do mês (1–31)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  transactions   Transaction[]
+  deletedAt      DateTime?
+}
+
+model Category {
+  id           String        @id @default(uuid()) @db.Uuid
+  userId       String        @db.Uuid
+  user         User          @relation(fields: [userId], references: [id])
+  name         String
+  description  String?
+  // chave da paleta do front (blue, orange...): o tom muda com o tema
+  color        String        @default("blue")
+  // nome do ícone do lucide
+  icon         String        @default("tag")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+  deletedAt    DateTime?
+}
+
+model Transaction {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+
+  accountId String  @db.Uuid
+  account   Account @relation("AccountTransactions", fields: [accountId], references: [id])
+
+  sourceAccountId String?  @db.Uuid
+  sourceAccount   Account? @relation("SourceAccountTransactions", fields: [sourceAccountId], references: [id])
+
+  destinationAccountId String?  @db.Uuid
+  destinationAccount   Account? @relation("destinationAccountTransactions", fields: [destinationAccountId], references: [id])
+
+  cardId String? @db.Uuid
+  card   Card?   @relation(fields: [cardId], references: [id])
+
+  categoryId String   @db.Uuid
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  parentTransactionId String?       @db.Uuid
+  parentTransaction   Transaction?  @relation("TransactionInstallments", fields: [parentTransactionId], references: [id])
+  installments        Transaction[] @relation("TransactionInstallments")
+
+  type   typeTransation
+  status TransactionStatus @default(CONFIRMED)
+
+  amount      Int      @default(0)
+  description String
+  date        DateTime
+
+  isRecurring       Boolean
+  installmentNumber Int?
+  totalInstallments Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  deletedAt DateTime?
+
+  @@index([cardId, date])
+  // base das consultas do dashboard (sempre por usuário + período)
+  @@index([userId, date])
+}
+
+// Um layout por usuário; sem linha, o front usa o layout padrão
+model DashboardLayout {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @unique @db.Uuid
+  user      User     @relation(fields: [userId], references: [id])
+  // versão do formato de `widgets`, para migrar o JSON no futuro
+  version   Int      @default(1)
+  // lista ordenada de widgets, validada com zod no módulo dashboard
+  widgets   Json
+  updatedAt DateTime @updatedAt
+}
