@@ -11,3 +11,6 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
+
+# build gerado pelo preset vercel do Nitro: a Vercel deve gerar no deploy
+.vercel
