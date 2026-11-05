@@ -35,6 +35,7 @@ await server
     expiry: EXPIRATION_IN_MILLISECONDS,
     cookie: {
       path: "/",
+      maxAge: EXPIRATION_IN_MILLISECONDS / 1000,
       httpOnly: true,
       sameSite: true,
       secure: process.env.NODE_ENV === "production",
