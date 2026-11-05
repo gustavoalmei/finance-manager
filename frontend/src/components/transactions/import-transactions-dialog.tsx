@@ -110,7 +110,7 @@ const templateColumns: TemplateColumn[] = [
     key: 'currentInstallment',
     width: 14,
     numFmt: '0',
-    note: 'Compra que já começou (ex.: 4 de 10): informe 4. Aí o Valor é o da parcela e a Data é a da parcela atual; as anteriores não são lançadas. Em branco = 1 (compra nova).',
+    note: 'Compra que já começou (ex.: 4 de 10): informe 4. O Valor continua sendo o total da compra e a Data é a da parcela atual; as anteriores não são lançadas. Em branco = 1 (compra nova).',
   },
 ]
 

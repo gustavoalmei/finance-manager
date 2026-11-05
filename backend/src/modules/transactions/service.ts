@@ -367,8 +367,8 @@ function buildTransactions(
 
     const total = row.installments;
     const start = row.currentInstallment;
-    const installmentAmount =
-      start > 1 ? row.amount : Math.round(row.amount / total);
+    // amount é sempre o total da compra, mesmo já começada (ex.: 4 de 10)
+    const installmentAmount = Math.round(row.amount / total);
     // id da 1ª criada gerado aqui para as outras apontarem para ela no mesmo INSERT
     const parentId = randomUUID();
     const card = row.card;

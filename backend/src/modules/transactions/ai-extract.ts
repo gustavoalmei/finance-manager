@@ -138,7 +138,7 @@ L5: Saldo disponível: R$ 3.210,00`,
           line: 3,
           date: todayISO(),
           description: "TV",
-          amount: 150,
+          amount: 1500,
           type: "EXPENSE",
           category: "Eletrônicos",
           card: EXAMPLE_CARD,
@@ -215,8 +215,9 @@ Leia o texto entre <texto> e </texto> e devolva SOMENTE um JSON no formato {"tra
 - category: o nome da lista acima que melhor combina pelo SIGNIFICADO (ex.: supermercado, padaria, restaurante, iFood → categoria de alimentação; Uber, 99, combustível → transporte). Se nenhuma combinar, "".
 - card: o nome do cartão da lista quando o texto disser que foi no cartão de crédito (nome do cartão, "crédito", "fatura", "parcela"). PIX, débito, boleto e receitas → "". Se a lista estiver vazia, sempre "".
 - installmentCurrent e installmentTotal (parcelas):
-  - "PARC 04/10", "4/10", "parcela 4 de 10" → 4 e 10, e amount é o valor DE UMA PARCELA.
-  - Compra nova parcelada ("3x de 100", "em 3 vezes de 100") → 1 e 3, e amount é o TOTAL da compra (300).
+  - Com parcelas, amount é SEMPRE o TOTAL da compra (valor da parcela × installmentTotal).
+  - "PARC 04/10 150,00", "4/10", "parcela 4 de 10" → 4 e 10, e amount = 150 × 10 = 1500.
+  - Compra nova parcelada ("3x de 100", "em 3 vezes de 100") → 1 e 3, e amount = 300.
   - À vista ou sem informação → 1 e 1.
   - Parcelas só existem com cartão; sem cartão, use 1 e 1.
 

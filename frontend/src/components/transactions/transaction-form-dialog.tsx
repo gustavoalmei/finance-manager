@@ -215,7 +215,8 @@ const TransactionForm = ({ transaction, onSuccess }: TransactionFormProps) => {
   const [type, setType] = useState<FormType>(
     transaction?.type === 'INCOME' ? 'INCOME' : 'EXPENSE',
   )
-  // centavos. Na criação com cartão é o total da compra; na edição, o da parcela
+  // centavos. Na criação com cartão é sempre o total da compra (mesmo já
+  // começada); na edição, o da parcela
   const [amount, setAmount] = useState(transaction?.amount ?? 0)
   const [description, setDescription] = useState(transaction?.description ?? '')
   const [categoryId, setCategoryId] = useState(transaction?.categoryId ?? null)
@@ -251,12 +252,12 @@ const TransactionForm = ({ transaction, onSuccess }: TransactionFormProps) => {
   const isInstallment = payWithCard && installments > 1
   // diminuir o total não pode deixar a parcela atual maior que ele
   const startInstallment = Math.min(currentInstallment, installments)
-  // já começou: Valor é o da parcela e Data é a da parcela atual; as anteriores
-  // foram cobradas antes e não são criadas
+  // já começou: Data é a da parcela atual; as anteriores foram cobradas antes
+  // e não são criadas
   const isStarted = isInstallment && !isEdit && startInstallment > 1
   const remainingInstallments = installments - startInstallment + 1
   const installmentAmount =
-    payWithCard && !isEdit && !isStarted
+    payWithCard && !isEdit
       ? Math.round(amount / installments)
       : amount
 
@@ -370,9 +371,11 @@ const TransactionForm = ({ transaction, onSuccess }: TransactionFormProps) => {
       <FormField
         htmlFor="amount"
         label={
-          (isEdit && transaction?.totalInstallments) || isStarted
+          isEdit && transaction?.totalInstallments
             ? 'Valor da parcela'
-            : 'Valor'
+            : isInstallment
+              ? 'Valor total da compra'
+              : 'Valor'
         }
         error={showError(errors.amount)}
       >

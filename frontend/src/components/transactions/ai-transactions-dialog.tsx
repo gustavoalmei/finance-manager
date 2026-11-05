@@ -510,9 +510,10 @@ const DraftEditor = ({
 
       {row.cardId && row.installmentTotal > 1 && (
         <p className="text-[11px] text-muted-foreground">
-          {row.installmentCurrent > 1
-            ? `Valor da parcela; lança as parcelas ${row.installmentCurrent} a ${row.installmentTotal}.`
-            : `Valor total da compra, dividido em ${row.installmentTotal}x.`}
+          {`Valor total da compra: ${row.installmentTotal}x de ${formatCurrency(Math.round(row.amount / row.installmentTotal) / 100)}`}
+          {row.installmentCurrent > 1 &&
+            `; lança as parcelas ${row.installmentCurrent} a ${row.installmentTotal}`}
+          .
         </p>
       )}
 

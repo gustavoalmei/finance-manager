@@ -57,19 +57,19 @@ export const reconcile = (
   );
 
   const unmatched: number[] = [];
-  // soma no mesmo "idioma" do texto: compra nova parcelada conta a parcela
+  // soma no mesmo "idioma" do texto: compra parcelada conta a parcela
   // que está no texto, não o total que a IA calculou
   let extractedTotal = 0;
   entries.forEach((entry, index) => {
     // valor 0 = a IA não leu o valor: já sai com aviso próprio
     if (entry.amount <= 0) return;
 
-    // compra nova parcelada ("3x de 100"): a IA devolve o total
-    const isNewInstallment =
-      entry.installmentTotal > 1 && entry.installmentCurrent === 1;
+    // compra parcelada: a IA devolve o total; o texto pode trazer o total
+    // ("3x, total 300") ou só a parcela ("PARC 04/10 150,00")
+    const isInstallment = entry.installmentTotal > 1;
     const fits = (amount: number) =>
       amount === entry.amount ||
-      (isNewInstallment && amount * entry.installmentTotal === entry.amount);
+      (isInstallment && amount * entry.installmentTotal === entry.amount);
 
     const free = pool.filter((item) => !item.used && fits(item.amount));
     // a linha indicada pela IA tem preferência; se ela errou só a numeração,
