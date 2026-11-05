@@ -53,7 +53,7 @@ export const Categories = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex sm:items-center justify-between gap-2 sm:flex-row flex-col">
         <div>
           <h1 className="text-2xl font-semibold">Minhas categorias</h1>
           <small className="text-muted-foreground">

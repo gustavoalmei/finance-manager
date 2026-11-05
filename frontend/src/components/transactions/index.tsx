@@ -118,8 +118,8 @@ export const Transactions = () => {
   // cartão selecionado: lançamentos diretos da conta + compras só desse cartão
   const periodTransactions = selectedCard
     ? accountTransactions.filter(
-        (item) => !item.cardId || item.cardId === selectedCard.id,
-      )
+      (item) => !item.cardId || item.cardId === selectedCard.id,
+    )
     : accountTransactions
   // o back devolve só os IDs: os nomes vêm das listas já em cache
   const { data: categories = [] } = useQuery(categoriesQueryOptions())
@@ -185,12 +185,12 @@ export const Transactions = () => {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex items-center justify-between gap-2 flex-wrap">
+      <div className="flex sm:items-center justify-between gap-2 flex-wrap sm:flex-row flex-col">
         <div>
           <h1 className="text-2xl font-semibold">Transações</h1>
           <small className="text-muted-foreground">{scopeLabel}</small>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 sm:flex-row flex-col">
           <Button variant="outline" onClick={() => setAiOpen(true)}>
             <Sparkles /> Lançar com IA
           </Button>
