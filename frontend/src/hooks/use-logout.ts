@@ -13,7 +13,7 @@ export const useLogout = () => {
       // limpa tudo: usuário em cache faria o /login redirecionar de volta,
       // e contas/cartões do usuário anterior não podem aparecer para o próximo
       queryClient.clear()
-      navigate({ to: '/login' })
+      navigate({ to: '/auth' })
     },
     onError: (error) => toaster.error(error),
   })
