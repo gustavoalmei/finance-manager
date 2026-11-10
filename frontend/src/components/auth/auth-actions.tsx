@@ -11,7 +11,7 @@ type AuthActionsProps = {
   altTo: LinkProps['to']
 }
 
-const actionClasses = 'h-12.5 cursor-pointer text-base font-bold'
+const actionClasses = 'h-12.5 cursor-pointer text-base font-bold rounded-xl'
 
 export const AuthActions = ({ submitLabel, isPending, altLabel, altTo }: AuthActionsProps) => (
   <>
@@ -21,7 +21,6 @@ export const AuthActions = ({ submitLabel, isPending, altLabel, altTo }: AuthAct
 
     <Separator className="my-0.75 h-0.5 bg-border" />
 
-    {/* navegação é link, não botão: permite abrir em nova aba e é anunciado corretamente */}
     <Link to={altTo} className={cn(buttonVariants({ variant: 'secondary' }), actionClasses)}>
       {altLabel}
     </Link>

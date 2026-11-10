@@ -9,7 +9,7 @@ type AuthFieldProps = ComponentProps<'input'> & {
 }
 
 const textClasses = 'text-base placeholder:text-placeholder md:text-base'
-const boxClasses = 'h-13 border-2 bg-input-bg dark:bg-input-bg'
+const boxClasses = 'h-13 border-1 bg-background rounded-xl'
 
 export const AuthField = ({ id, label, type, ...props }: AuthFieldProps) => (
   <div className="flex flex-col gap-2.5">
@@ -30,7 +30,7 @@ export const AuthField = ({ id, label, type, ...props }: AuthFieldProps) => (
         id={id}
         name={id}
         type={type}
-        className={`${boxClasses} ${textClasses} rounded-lg px-5`}
+        className={`${boxClasses} ${textClasses} px-5`}
         {...props}
       />
     )}

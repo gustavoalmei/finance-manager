@@ -5,11 +5,10 @@ import { useFormFields } from '#/hooks/use-form-fields'
 import { auth } from '#/lib/auth'
 import { userQueryOptions } from '#/lib/auth/queries'
 import { toaster } from '#/lib/toaster'
-import { AuthActions } from './auth-actions'
 import { AuthField } from './auth-field'
-import { AuthLayout } from './auth-layout'
+import { Button } from '../ui/button'
 
-export const Login = () => {
+export const Login = ({ setTabSelected }: { setTabSelected: (tab: string) => void }) => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { values, field } = useFormFields({ email: '', password: '' })
@@ -31,7 +30,7 @@ export const Login = () => {
   }
 
   return (
-    <AuthLayout title="Bem vindo" description="Faça login para continuar" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <AuthField
         {...field('email')}
         label="Email"
@@ -49,12 +48,13 @@ export const Login = () => {
         required
       />
 
-      <AuthActions
-        submitLabel="Entrar"
-        isPending={loginMutation.isPending}
-        altLabel="Cadastrar"
-        altTo="/register"
-      />
-    </AuthLayout>
+      <div className="flex flex-col gap-2.5 text-center">
+        <Button type="submit" disabled={loginMutation.isPending} className={'h-12.5 cursor-pointer text-base font-bold rounded-xl'}>
+          Entrar
+        </Button>
+
+        <span>Ainda não tem uma conta? <button type="button" onClick={() => setTabSelected('Registrar')} className="cursor-pointer font-bold underline">Cadastre-se</button></span>
+      </div>
+    </form>
   )
 }

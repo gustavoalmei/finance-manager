@@ -1,22 +1,19 @@
 import type { SubmitEvent } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
 import { useFormFields } from '#/hooks/use-form-fields'
 import { auth } from '#/lib/auth'
 import { toaster } from '#/lib/toaster'
-import { AuthActions } from './auth-actions'
 import { AuthField } from './auth-field'
-import { AuthLayout } from './auth-layout'
+import { Button } from '../ui/button'
 
-export const Register = () => {
-  const navigate = useNavigate()
+export const Register = ({ setTabSelected }: { setTabSelected: (tab: string) => void }) => {
   const { values, field } = useFormFields({ name: '', email: '', password: '' })
 
   const registerMutation = useMutation({
     mutationFn: auth.register,
     onSuccess: () => {
       toaster.success('Conta criada com sucesso!')
-      navigate({ to: '/login' })
+      setTabSelected('Entrar')
     },
     onError: (error) => toaster.error(error),
   })
@@ -27,7 +24,7 @@ export const Register = () => {
   }
 
   return (
-    <AuthLayout title="Cadastre-se" description="Crie uma conta para continuar" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <AuthField
         {...field('name')}
         label="Nome"
@@ -53,12 +50,13 @@ export const Register = () => {
         required
       />
 
-      <AuthActions
-        submitLabel="Criar conta"
-        isPending={registerMutation.isPending}
-        altLabel="Já tenho uma conta"
-        altTo="/login"
-      />
-    </AuthLayout>
+      <div className="flex flex-col gap-2.5 text-center">
+        <Button type="submit" disabled={registerMutation.isPending} className={'h-12.5 cursor-pointer text-base font-bold rounded-xl'}>
+          Criar conta
+        </Button>
+
+        <span>Já tem uma conta? <button type="button" onClick={() => setTabSelected('Entrar')} className="cursor-pointer font-bold underline">Entrar</button></span>
+      </div>
+    </form>
   )
 }
